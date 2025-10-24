@@ -1,0 +1,22 @@
+@import "tailwindcss";
+
+/* optional smoothing */
+:root{
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+/* Hide native scrollbar for horizontal scrollers */
+.scrollbar-none::-webkit-scrollbar { display: none; }
+.scrollbar-none { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* Inputs to match the glassy cards */
+.input-glass {
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 14px;
+  padding: 10px 12px;
+  color: #fff;
+  width: 100%;
+  outline: none;
+}
+.input-glass::placeholder { color: rgba(255,255,255,0.55); }
