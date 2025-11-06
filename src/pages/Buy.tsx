@@ -37,6 +37,54 @@ export default function Buy() {
   }, [single, cart.items]);
 
   const payable = items.reduce((s, p) => s + p.price * (p.qty ?? 1), 0);
+// add to the import line at the top:
+import { useMemo, useState, useEffect, useRef } from "react";
+
+// --- AdSlot (safe loader + no CLS) ---
+function AdSlot({ width = 300, height = 250, title = "Sponsored" }) {
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!ref.current) return;
+
+    // Reserve space
+    ref.current.style.minWidth = width + "px";
+    ref.current.style.minHeight = height + "px";
+
+    (window as any).atOptions = {
+      key: "9caf044441968aa85cb4c843dd6c7f85",
+      format: "iframe",
+      height,
+      width,
+      params: {},
+    };
+
+    const s = document.createElement("script");
+    s.type = "text/javascript";
+    s.src =
+      "//www.highperformanceformat.com/9caf044441968aa85cb4c843dd6c7f85/invoke.js";
+    s.async = true;
+    ref.current.appendChild(s);
+
+    return () => {
+      try {
+        if (ref.current) ref.current.innerHTML = "";
+      } catch {}
+    };
+  }, [width, height]);
+
+  return (
+    <div className="mx-auto my-8 w-[300px]">
+      <div className="mb-1 text-[11px] uppercase tracking-wide text-white/45">
+        {title}
+      </div>
+      <div
+        ref={ref}
+        className="overflow-hidden rounded-xl border border-white/10 bg-white/5 backdrop-blur"
+      />
+    </div>
+  );
+}
 
   // modal
   const [showPay, setShowPay] = useState(false);
@@ -124,55 +172,8 @@ export default function Buy() {
               </button>
             )}
           </div>
-          // add to the import line at the top:
-import { useMemo, useState, useEffect, useRef } from "react";
-
-// --- AdSlot (safe loader + no CLS) ---
-function AdSlot({ width = 300, height = 250, title = "Sponsored" }) {
-  const ref = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (!ref.current) return;
-
-    // Reserve space
-    ref.current.style.minWidth = width + "px";
-    ref.current.style.minHeight = height + "px";
-
-    (window as any).atOptions = {
-      key: "9caf044441968aa85cb4c843dd6c7f85",
-      format: "iframe",
-      height,
-      width,
-      params: {},
-    };
-
-    const s = document.createElement("script");
-    s.type = "text/javascript";
-    s.src =
-      "//www.highperformanceformat.com/9caf044441968aa85cb4c843dd6c7f85/invoke.js";
-    s.async = true;
-    ref.current.appendChild(s);
-
-    return () => {
-      try {
-        if (ref.current) ref.current.innerHTML = "";
-      } catch {}
-    };
-  }, [width, height]);
-
-  return (
-    <div className="mx-auto my-8 w-[300px]">
-      <div className="mb-1 text-[11px] uppercase tracking-wide text-white/45">
-        {title}
-      </div>
-      <div
-        ref={ref}
-        className="overflow-hidden rounded-xl border border-white/10 bg-white/5 backdrop-blur"
-      />
-    </div>
-  );
-}
-
+           {/* Sponsored banner (300×250) under billing */}
+  <AdSlot width={300} height={250} title="Sponsored" />
         </aside>
       </main>
 
